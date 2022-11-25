@@ -1,0 +1,5 @@
+{
+  "watch": ["src", "db"],
+  "ext": "ts, js",
+  "exec": "node -r ts-node/register ./src/index.ts"
+}

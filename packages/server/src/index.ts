@@ -6,3 +6,5 @@ import "./app";
 import "./user";
 import "./product";
 import "./auth";
+// Has to be last to catch errors
+import "./logger";

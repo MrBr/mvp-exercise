@@ -47,7 +47,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 
 export const deleteUser: RequestHandler = async (req, res, next) => {
   try {
-    await db.models.User.destroy({
+    await User.destroy({
       where: { id: req.params.id },
     });
     next();
@@ -58,20 +58,23 @@ export const deleteUser: RequestHandler = async (req, res, next) => {
 };
 
 export const authoriseUser: RequestHandler = async (req, res, next) => {
-  const user = (await userServices.getUser(
+  const user = await userServices.getUser(
     {
       username: req.body.username,
     },
     "withPassword"
-  )) as User;
+  );
 
-  const isValidPassword = await validateUserPassword(user, req.body.password);
-  if (!isValidPassword) {
+  const validCredentials = user
+    ? await validateUserPassword(user, req.body.password)
+    : false;
+
+  if (!validCredentials) {
     next(new InvalidCredentialsError());
     return;
   }
 
-  res.locals.data = generateToken({ userId: user.id });
+  res.locals.data = generateToken({ userId: (user as User).id });
   next();
 };
 

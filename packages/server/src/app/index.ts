@@ -10,5 +10,6 @@ app.listen(process.env.PORT, () =>
   console.log(`Application started at port: ${process.env.PORT}`)
 );
 
-export { sendData } from "./middleware";
+export * from "./middleware";
+export * from "./types";
 export default app;

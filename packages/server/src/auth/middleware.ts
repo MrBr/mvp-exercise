@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { verifyToken } from "./services";
+import { UnAuthorizedError } from "./errors";
 
 export const identify: RequestHandler = (req, res, next) => {
   if (req.headers.authorization) {
@@ -10,7 +11,7 @@ export const identify: RequestHandler = (req, res, next) => {
 
 export const isIdentified: RequestHandler = (req, res, next) => {
   if (!res.locals.token) {
-    throw new Error();
+    throw new UnAuthorizedError();
   }
   next();
 };

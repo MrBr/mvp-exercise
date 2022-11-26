@@ -8,6 +8,9 @@ import { Table, Column, Unique, Model } from "sequelize-typescript";
       exclude: ["password"],
     },
   },
+  scopes: {
+    withPassword: {},
+  },
   hooks: {
     afterCreate: (record) => {
       delete record.dataValues.password;

@@ -79,8 +79,9 @@ export const authoriseUser: RequestHandler = async (req, res, next) => {
 };
 
 export const canEditUser: RequestHandler = (req, res, next) => {
-  if (req.params.id === res.locals.token.userId) {
+  if (parseInt(req.params.id) === res.locals.token.userId) {
     next();
+    return;
   }
   throw new Error("Operation not allowed");
 };

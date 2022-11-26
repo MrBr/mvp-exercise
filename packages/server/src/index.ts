@@ -5,3 +5,4 @@ import "./db";
 import "./app";
 import "./user";
 import "./product";
+import "./auth";

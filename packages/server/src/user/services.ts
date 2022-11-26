@@ -1,19 +1,19 @@
 import { compare, hash } from "bcrypt";
 import User from "./user.model";
 import db from "../db";
-import { RequestHandler } from "express";
 import { UPDATEABLE_FIELDS } from "./constants";
 
-export const getUser = async (userId: string) => {
-  return db.models.User.findByPk(userId);
+export const getUser = async (
+  filters: { id: string } | { username: string },
+  scope: "withPassword" | "defaultScope" = "defaultScope"
+) => {
+  return db.models.User.scope(scope).findOne({ where: filters });
 };
 
 export const createUser = async (
   user: Pick<User, "username" | "password" | "role">
 ) => {
-  return db.models.User.create({
-    user,
-  });
+  return db.models.User.create(user);
 };
 
 export const updateUser = async (
@@ -42,8 +42,8 @@ export const validateUpdates = (update: Partial<User>) => {
   }
 };
 
-export const validateUserPassword = (user: User, passwordHash: string) => {
-  return compare(user.password, passwordHash);
+export const validateUserPassword = (user: User, password: string) => {
+  return compare(password, user.password);
 };
 
 export const hashPassword = async (password: string) => {

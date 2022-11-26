@@ -3,4 +3,5 @@ import app from "../app";
 
 app.use(identify);
 
-export { isIdentified } from "./middleware";
+export * from "./middleware";
+export * from "./services";

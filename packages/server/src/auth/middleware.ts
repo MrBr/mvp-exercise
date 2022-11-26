@@ -4,7 +4,8 @@ import { UnAuthorizedError } from "./errors";
 
 export const identify: RequestHandler = (req, res, next) => {
   if (req.headers.authorization) {
-    res.locals.token = verifyToken(req.headers.authorization as string);
+    const token = req.headers.authorization.split(" ")[1];
+    res.locals.token = verifyToken(token as string);
   }
   next();
 };

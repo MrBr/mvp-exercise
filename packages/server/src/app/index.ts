@@ -11,5 +11,4 @@ app.listen(process.env.PORT, () =>
 );
 
 export * from "./middleware";
-export * from "./types";
 export default app;

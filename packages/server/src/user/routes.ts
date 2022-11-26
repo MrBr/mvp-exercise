@@ -9,7 +9,7 @@ import {
   updateUser,
 } from "./middleware";
 
-app.get("/user/:id", isIdentified, getUser, sendData);
+app.get("/user/:id", isIdentified, canEditUser, getUser, sendData);
 
 app.post("/user", createUser, sendData);
 

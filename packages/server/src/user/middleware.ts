@@ -1,4 +1,3 @@
-import db from "../db";
 import { RequestHandler } from "express";
 import * as userServices from "./services";
 import { generateToken } from "../auth";
@@ -9,7 +8,7 @@ import { InvalidCredentialsError } from "./errors";
 export const getUser: RequestHandler = async (req, res, next) => {
   try {
     res.locals.data = await userServices.getUser({
-      id: req.params.id,
+      id: parseInt(req.params.id),
     });
     next();
   } catch (e) {
@@ -37,7 +36,7 @@ export const createUser: RequestHandler = async (req, res, next) => {
 export const updateUser: RequestHandler = async (req, res, next) => {
   try {
     userServices.validateUpdates(req.body);
-    await userServices.updateUser(req.body, req.body);
+    await userServices.updateUser(parseInt(req.params.id), req.body);
     next();
   } catch (e) {
     next(e);

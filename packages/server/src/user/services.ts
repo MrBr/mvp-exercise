@@ -3,7 +3,7 @@ import User from "./user.model";
 import { UPDATEABLE_FIELDS } from "./constants";
 
 export const getUser = async (
-  filters: { id: string } | { username: string },
+  filters: { id: number } | { username: string },
   scope: "withPassword" | "defaultScope" = "defaultScope"
 ) => {
   return User.scope(scope).findOne({ where: filters });
@@ -16,7 +16,7 @@ export const createUser = async (
 };
 
 export const updateUser = async (
-  userId: string,
+  userId: number,
   update: Pick<User, "username">
 ) => {
   return User.update(update, {
@@ -26,7 +26,7 @@ export const updateUser = async (
   });
 };
 
-export const deleteUser = async (userId: string) => {
+export const deleteUser = async (userId: number) => {
   return User.destroy({
     where: { id: userId },
   });

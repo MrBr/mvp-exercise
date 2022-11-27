@@ -1,4 +1,4 @@
-import { Table, Column, Unique, Model } from "sequelize-typescript";
+import { Table, Column, Unique, Model, Validate } from "sequelize-typescript";
 
 @Table({
   tableName: "user",
@@ -28,6 +28,7 @@ export default class User extends Model {
   @Column
   role: "buyer" | "seller";
 
+  @Validate({ min: 0 })
   @Column
   deposit: number;
 }

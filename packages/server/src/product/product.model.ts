@@ -4,6 +4,7 @@ import {
   Model,
   BelongsTo,
   ForeignKey,
+  Validate,
 } from "sequelize-typescript";
 import User from "../user/user.model";
 
@@ -18,6 +19,7 @@ export default class Product extends Model {
   @Column
   cost: number;
 
+  @Validate({ min: 0 })
   @Column
   amountAvailable: number;
 

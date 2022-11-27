@@ -1,5 +1,5 @@
 import { identify } from "./middleware";
-import app from "../app";
+import app from "../router";
 
 app.use(identify);
 

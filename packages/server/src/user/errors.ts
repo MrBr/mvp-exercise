@@ -1,4 +1,4 @@
-import { ApiError } from "../app";
+import { ApiError } from "../router";
 import { ALLOWED_DEPOSITS } from "./constants";
 
 export class InvalidCredentialsError extends ApiError {

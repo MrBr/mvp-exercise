@@ -1,4 +1,4 @@
-import app, { sendData, sendStatusOk } from "../app";
+import router, { sendData, sendStatusOk } from "../router";
 import {
   canCreateProduct,
   canEditProduct,
@@ -9,11 +9,17 @@ import {
 } from "./middleware";
 import { isIdentified } from "../auth";
 
-app.get("/product/:id", getProduct, sendData);
+router.get("/product/:id", getProduct, sendData);
 
-app.post("/product", isIdentified, canCreateProduct, createProduct, sendData);
+router.post(
+  "/product",
+  isIdentified,
+  canCreateProduct,
+  createProduct,
+  sendData
+);
 
-app.put(
+router.put(
   "/product/:id",
   isIdentified,
   canEditProduct,
@@ -21,7 +27,7 @@ app.put(
   sendStatusOk
 );
 
-app.delete(
+router.delete(
   "/product/:id",
   isIdentified,
   canEditProduct,

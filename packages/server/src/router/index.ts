@@ -1,15 +1,15 @@
 import express from "express";
 import bodyParser from "body-parser";
 
-const app = express();
+const router = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ limit: "2mb" }));
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json({ limit: "2mb" }));
 
-app.listen(process.env.PORT, () =>
+router.listen(process.env.PORT, () =>
   console.log(`Application started at port: ${process.env.PORT}`)
 );
 
 export * from "./middleware";
 export * from "./errors";
-export default app;
+export default router;

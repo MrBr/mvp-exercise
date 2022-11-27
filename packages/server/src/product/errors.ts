@@ -1,4 +1,4 @@
-import { ApiError } from "../app";
+import { ApiError } from "../router";
 
 export class ForbiddenProductOperationError extends ApiError {
   status = 403;

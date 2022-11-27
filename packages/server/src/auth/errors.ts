@@ -1,4 +1,4 @@
-import { ApiError } from "../app";
+import { ApiError } from "../router";
 
 export class UnAuthorizedError extends ApiError {
   status = 401;

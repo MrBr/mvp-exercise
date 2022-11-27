@@ -1,4 +1,4 @@
-import app, { sendData, sendStatusOk } from "../app";
+import router, { sendData, sendStatusOk } from "../router";
 import { isIdentified } from "../auth";
 import {
   authoriseUser,
@@ -11,16 +11,16 @@ import {
   updateUser,
 } from "./middleware";
 
-app.get("/user/:id", isIdentified, canEditUser, getUser, sendData);
+router.get("/user/:id", isIdentified, canEditUser, getUser, sendData);
 
-app.post("/user", createUser, sendData);
+router.post("/user", createUser, sendData);
 
-app.put("/user/:id", isIdentified, canEditUser, updateUser, sendStatusOk);
+router.put("/user/:id", isIdentified, canEditUser, updateUser, sendStatusOk);
 
-app.delete("/user/:id", isIdentified, canEditUser, deleteUser, sendStatusOk);
+router.delete("/user/:id", isIdentified, canEditUser, deleteUser, sendStatusOk);
 
-app.post("/authorise", authoriseUser, sendData);
+router.post("/authorise", authoriseUser, sendData);
 
-app.put("/deposit", isIdentified, deposit, sendData);
+router.put("/deposit", isIdentified, deposit, sendData);
 
-app.put("/reset", isIdentified, reset, sendStatusOk);
+router.put("/reset", isIdentified, reset, sendStatusOk);

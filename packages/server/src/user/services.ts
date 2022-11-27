@@ -1,6 +1,12 @@
 import { compare, hash } from "bcrypt";
 import User from "./user.model";
-import { UPDATEABLE_FIELDS } from "./constants";
+import { ALLOWED_DEPOSITS, UPDATEABLE_FIELDS } from "./constants";
+import db from "../db";
+import {
+  InvalidDepositError,
+  InvalidDepositor,
+  InvalidUpdatePayloadError,
+} from "./errors";
 
 export const getUser = async (
   filters: { id: number } | { username: string },
@@ -26,18 +32,43 @@ export const updateUser = async (
   });
 };
 
+export const deposit = async (userId: number, depositAmount: number) => {
+  return User.update(
+    {
+      deposit: db.literal(`deposit + ${depositAmount}`),
+    },
+    {
+      where: {
+        id: userId,
+      },
+    }
+  );
+};
+
 export const deleteUser = async (userId: number) => {
   return User.destroy({
     where: { id: userId },
   });
 };
 
-export const validateUpdates = (update: Partial<User>) => {
+export const assertUpdates = (update: Partial<User>) => {
   const forbiddenFields = Object.keys(update).filter(
     (field) => !UPDATEABLE_FIELDS.includes(field)
   );
   if (forbiddenFields.length > 0) {
-    throw new Error(`Updating forbidden fields: ${forbiddenFields}`);
+    throw new InvalidUpdatePayloadError(forbiddenFields);
+  }
+};
+
+export const assertDeposit = (deposit: number) => {
+  if (!ALLOWED_DEPOSITS.includes(deposit)) {
+    throw new InvalidDepositError();
+  }
+};
+
+export const assertDepositOperator = (user: User) => {
+  if (user.role !== "buyer") {
+    throw new InvalidDepositor();
   }
 };
 

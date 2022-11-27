@@ -35,7 +35,7 @@ export const createUser: RequestHandler = async (req, res, next) => {
 
 export const updateUser: RequestHandler = async (req, res, next) => {
   try {
-    userServices.validateUpdates(req.body);
+    userServices.assertUpdates(req.body);
     await userServices.updateUser(parseInt(req.params.id), req.body);
     next();
   } catch (e) {
@@ -75,6 +75,17 @@ export const authoriseUser: RequestHandler = async (req, res, next) => {
 
   res.locals.data = generateToken({ userId: (user as User).id });
   next();
+};
+
+export const deposit: RequestHandler = async (req, res, next) => {
+  try {
+    userServices.assertDeposit(req.body.coins);
+    await userServices.deposit(res.locals.token.userId, req.body.coins);
+    next();
+  } catch (e) {
+    next(e);
+    return;
+  }
 };
 
 export const canEditUser: RequestHandler = (req, res, next) => {

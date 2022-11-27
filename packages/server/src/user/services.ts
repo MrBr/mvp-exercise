@@ -35,7 +35,7 @@ export const updateUser = async (
 export const deposit = async (userId: number, depositAmount: number) => {
   const updated = await User.update(
     {
-      deposit: db.literal(`deposit + ${depositAmount}`),
+      deposit: db.literal(`deposit + ${db.escape(depositAmount)}`),
     },
     {
       where: {

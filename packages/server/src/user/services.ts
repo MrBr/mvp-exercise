@@ -1,5 +1,6 @@
 import { compare, hash } from "bcrypt";
 import User from "./user.model";
+import { Transaction } from "sequelize";
 import { ALLOWED_DEPOSITS, UPDATEABLE_FIELDS } from "./constants";
 import db from "../db";
 import {
@@ -59,6 +60,29 @@ export const reset = async (userId: number) => {
       },
     }
   );
+};
+
+export const chargeUser = async (
+  userId: number,
+  total: number,
+  transaction: Transaction
+) => {
+  const updates = await User.update(
+    {
+      deposit: db.literal(`deposit - ${db.escape(total)}`),
+    },
+    {
+      where: {
+        id: userId,
+      },
+      returning: true,
+      transaction,
+    }
+  );
+  const user = updates[1][0];
+  const deposit = user.deposit;
+
+  return { deposit };
 };
 
 export const deleteUser = async (userId: number) => {

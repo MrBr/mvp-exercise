@@ -13,3 +13,17 @@ export class InvalidRoleOperationError extends ApiError {
     super("Buyer can't create product.");
   }
 }
+
+export class UnexistingProductError extends ApiError {
+  status = 400;
+  constructor() {
+    super("Product does not exists.");
+  }
+}
+
+export class InvalidUnloadAmountError extends ApiError {
+  status = 400;
+  constructor() {
+    super("Product unload amount must be more than 0.");
+  }
+}

@@ -5,7 +5,6 @@ import {
   ForbiddenProductOperationError,
   InvalidRoleOperationError,
 } from "./errors";
-import { getUser } from "../user/services";
 
 export const getProduct: RequestHandler = async (req, res, next) => {
   try {
@@ -23,7 +22,7 @@ export const createProduct: RequestHandler = async (req, res, next) => {
       productName: req.body.productName,
       cost: req.body.cost,
       amountAvailable: req.body.amountAvailable,
-      sellerId: res.locals.token.userId,
+      sellerId: res.locals.user.id,
     });
     next();
   } catch (e) {
@@ -57,7 +56,7 @@ export const deleteProduct: RequestHandler = async (req, res, next) => {
 
 export const canEditProduct: RequestHandler = async (req, res, next) => {
   const product = await productServices.getProduct(parseInt(req.params.id));
-  if (product?.sellerId === res.locals.token.userId) {
+  if (product?.sellerId === res.locals.user.id) {
     next();
     return;
   }
@@ -65,8 +64,7 @@ export const canEditProduct: RequestHandler = async (req, res, next) => {
 };
 
 export const canCreateProduct: RequestHandler = async (req, res, next) => {
-  const user = await getUser({ id: res.locals.token.userId });
-  if (user?.role === "seller") {
+  if (res.locals.user?.role === "seller") {
     next();
     return;
   }

@@ -66,7 +66,7 @@ export const assertDeposit = (deposit: number) => {
   }
 };
 
-export const assertDepositOperator = (user: User) => {
+export const assertDepositor = (user: User) => {
   if (user.role !== "buyer") {
     throw new InvalidDepositor();
   }

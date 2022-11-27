@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import * as userServices from "./services";
 import { generateToken } from "../auth";
-import { validateUserPassword } from "./services";
+import { assertDepositor, validateUserPassword } from "./services";
 import User from "./user.model";
 import { InvalidCredentialsError } from "./errors";
 
@@ -80,7 +80,8 @@ export const authoriseUser: RequestHandler = async (req, res, next) => {
 export const deposit: RequestHandler = async (req, res, next) => {
   try {
     userServices.assertDeposit(req.body.coins);
-    await userServices.deposit(res.locals.token.userId, req.body.coins);
+    userServices.assertDepositor(res.locals.user);
+    await userServices.deposit(res.locals.user.id, req.body.coins);
     next();
   } catch (e) {
     next(e);
@@ -89,7 +90,7 @@ export const deposit: RequestHandler = async (req, res, next) => {
 };
 
 export const canEditUser: RequestHandler = (req, res, next) => {
-  if (parseInt(req.params.id) === res.locals.token.userId) {
+  if (parseInt(req.params.id) === res.locals.user.id) {
     next();
     return;
   }

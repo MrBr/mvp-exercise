@@ -33,9 +33,25 @@ export const updateUser = async (
 };
 
 export const deposit = async (userId: number, depositAmount: number) => {
-  return User.update(
+  const updated = await User.update(
     {
       deposit: db.literal(`deposit + ${depositAmount}`),
+    },
+    {
+      where: {
+        id: userId,
+      },
+      returning: true,
+    }
+  );
+
+  return updated[1][0];
+};
+
+export const reset = async (userId: number) => {
+  return User.update(
+    {
+      deposit: 0,
     },
     {
       where: {

@@ -81,7 +81,22 @@ export const deposit: RequestHandler = async (req, res, next) => {
   try {
     userServices.assertDeposit(req.body.coins);
     userServices.assertDepositor(res.locals.user);
-    await userServices.deposit(res.locals.user.id, req.body.coins);
+    const updatedUser = await userServices.deposit(
+      res.locals.user.id,
+      req.body.coins
+    );
+    res.locals.data = updatedUser.deposit;
+    next();
+  } catch (e) {
+    next(e);
+    return;
+  }
+};
+
+export const reset: RequestHandler = async (req, res, next) => {
+  try {
+    userServices.assertDepositor(res.locals.user);
+    await userServices.reset(res.locals.user.id);
     next();
   } catch (e) {
     next(e);

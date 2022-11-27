@@ -7,6 +7,7 @@ import {
   deleteUser,
   deposit,
   getUser,
+  reset,
   updateUser,
 } from "./middleware";
 
@@ -20,4 +21,6 @@ app.delete("/user/:id", isIdentified, canEditUser, deleteUser, sendStatusOk);
 
 app.post("/authorise", authoriseUser, sendData);
 
-app.post("/deposit", isIdentified, deposit, sendStatusOk);
+app.put("/deposit", isIdentified, deposit, sendData);
+
+app.put("/reset", isIdentified, reset, sendStatusOk);

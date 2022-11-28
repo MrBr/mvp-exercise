@@ -1,14 +1,11 @@
-import React, { FunctionComponent } from "react";
-import { Button, Card } from "react-bootstrap";
+import React, { FunctionComponent, ReactNode } from "react";
+import { Card } from "react-bootstrap";
 import { Product } from "../types";
 
 const ProductCard: FunctionComponent<{
   product: Product;
-  onSelect: (product: Product) => void;
-  onEdit?: (product: Product) => void;
-  editable?: boolean;
-  buyable: boolean;
-}> = ({ product, onSelect, buyable, editable, onEdit }) => {
+  action?: ReactNode;
+}> = ({ action, product }) => {
   return (
     <Card>
       <Card.Header>{product.productName}</Card.Header>
@@ -16,14 +13,7 @@ const ProductCard: FunctionComponent<{
         <div>Cost: {product.cost}</div>
         <div>Amount available: {product.amountAvailable}</div>
       </Card.Body>
-      <Card.Footer>
-        <Button onClick={() => onSelect(product)} disabled={!buyable}>
-          Select
-        </Button>
-        {editable && onEdit && (
-          <Button onClick={() => onEdit(product)}>Edit</Button>
-        )}
-      </Card.Footer>
+      {action && <Card.Footer>{action}</Card.Footer>}
     </Card>
   );
 };

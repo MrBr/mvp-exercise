@@ -1,7 +1,7 @@
 export interface User {
   username: string;
   deposit: number;
-  role: string;
+  role: "buyer" | "seller";
   id: number;
   password?: string;
 }

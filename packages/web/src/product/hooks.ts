@@ -1,9 +1,10 @@
 import { useApi } from "../app";
 import { getAll } from "./requests";
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect, useMemo } from "react";
 import { ProductsContext } from "./providers/Prodcuts";
+import { Product } from "./types";
 
-const useProducts = () => {
+export const useProducts = () => {
   const { fetch, response, loading } = useApi(getAll);
   const [products, setProducts] = useContext(ProductsContext);
 
@@ -24,4 +25,25 @@ const useProducts = () => {
   return { load, products, loading };
 };
 
-export default useProducts;
+export const useProduct = (
+  productId: number
+): [Product, (product: Product) => void] => {
+  const [products, setProducts] = useContext(ProductsContext);
+
+  const product = useMemo(
+    () => products?.find(({ id }) => productId),
+    [products, productId]
+  ) as Product;
+
+  const setProduct = useCallback(
+    (updatedProduct: Product) => {
+      const updatedProducts = (products as Product[]).map((product) =>
+        product.id === updatedProduct.id ? updatedProduct : product
+      );
+      setProducts(updatedProducts);
+    },
+    [setProducts, products]
+  );
+
+  return [product, setProduct];
+};

@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import { Container, Row, Col, FormGroup, Form, Button } from "react-bootstrap";
 import * as yup from "yup";
 import { useUserAuth } from "../hooks";
+import { Link } from "react-router-dom";
 
 const LoginSchema = yup.object().shape({
   password: yup.string().min(8, "Too Short!").max(24, "Too Long!").required(),
@@ -27,15 +28,18 @@ export const Login = () => {
         <Col>
           <h1>Login</h1>
         </Col>
+        <Col className="col-auto">
+          <Link to="/">Dashboard</Link>
+        </Col>
       </Row>
       <Form noValidate>
         <Row>
           <Col>
-            <FormGroup>
+            <FormGroup className="mt-3">
               <Form.Label>Username</Form.Label>
               <Form.Control name="username" onChange={formik.handleChange} />
             </FormGroup>
-            <FormGroup>
+            <FormGroup className="mt-3">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 name="password"
@@ -44,7 +48,7 @@ export const Login = () => {
               />
             </FormGroup>
             {error && <Form.Label>{error}</Form.Label>}
-            <FormGroup>
+            <FormGroup className="mt-3">
               <Button onClick={formik.submitForm} disabled={loading}>
                 Submit
               </Button>
@@ -52,6 +56,9 @@ export const Login = () => {
           </Col>
         </Row>
       </Form>
+      <p className="mt-3">
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
     </Container>
   );
 };

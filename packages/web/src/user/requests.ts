@@ -6,10 +6,19 @@ export const register = createRequest<
   DataResponse<User>
 >("/user", "POST");
 
+export const updateUser = (id: number, updates: Pick<User, "username">) =>
+  createRequest<Pick<User, "username">, StatusResponse>(
+    `/user/${id}`,
+    "PUT"
+  )(updates);
+
 export const login = createRequest<
   Pick<User, "username" | "password">,
   DataResponse<string>
 >("/authorise", "POST");
+
+export const deleteUser = (id: number) =>
+  createRequest<void, StatusResponse>(`/user/${id}`, "DELETE")();
 
 export const reset = createRequest<void, StatusResponse>("/reset", "PUT");
 

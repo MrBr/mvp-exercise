@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { Container, Row, Col, FormGroup, Form, Button } from "react-bootstrap";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useApi } from "../../app";
 import { register } from "../requests";
 import { User } from "../types";
@@ -39,11 +39,14 @@ export const Register = () => {
         <Col>
           <h1>Register</h1>
         </Col>
+        <Col className="col-auto">
+          <Link to="/">Dashboard</Link>
+        </Col>
       </Row>
       <Form noValidate>
         <Row>
           <Col>
-            <FormGroup>
+            <FormGroup className="mt-3">
               <Form.Label>Username</Form.Label>
               <Form.Control
                 name="username"
@@ -54,7 +57,7 @@ export const Register = () => {
                 {formik.errors.username}
               </Form.Control.Feedback>
             </FormGroup>
-            <FormGroup>
+            <FormGroup className="mt-3">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 name="password"
@@ -66,12 +69,13 @@ export const Register = () => {
                 {formik.errors.password}
               </Form.Control.Feedback>
             </FormGroup>
-            <FormGroup>
+            <FormGroup className="mt-3">
               <Form.Label>Role</Form.Label>
               <Form.Check
                 type="radio"
                 name="role"
                 label="buyer"
+                value="buyer"
                 onChange={formik.handleChange}
                 defaultChecked
               />
@@ -79,11 +83,12 @@ export const Register = () => {
                 type="radio"
                 name="role"
                 label="seller"
+                value="seller"
                 onChange={formik.handleChange}
               />
             </FormGroup>
             {error && <Form.Label>{error}</Form.Label>}
-            <FormGroup>
+            <FormGroup className="mt-3">
               <Button onClick={formik.submitForm} disabled={loading}>
                 Submit
               </Button>
@@ -91,6 +96,9 @@ export const Register = () => {
           </Col>
         </Row>
       </Form>
+      <p className="mt-3">
+        Already have an account? <Link to="/login">Log in</Link>
+      </p>
     </Container>
   );
 };

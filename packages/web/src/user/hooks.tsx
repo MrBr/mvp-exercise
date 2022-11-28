@@ -3,9 +3,6 @@ import { ActiveUserContext } from "./providers/ActiveUser";
 import DepositModal from "./components/DepositModal";
 import { useApi } from "../app";
 import { login as loginRequest } from "./requests";
-import { FormikProps, useFormik } from "formik";
-import { Product } from "../product/types";
-import * as yup from "yup";
 
 export const useActiveUser = () => {
   return useContext(ActiveUserContext);

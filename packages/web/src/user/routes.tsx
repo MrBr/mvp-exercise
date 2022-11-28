@@ -4,6 +4,8 @@ import { Route } from "react-router-dom";
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
 import UnIdentified from "./components/UnIdentified";
+import Identified from "./components/Identified";
+import { Profile } from "./pages/Profile";
 
 const renderUserRoutes = () => (
   <>
@@ -21,6 +23,14 @@ const renderUserRoutes = () => (
         <UnIdentified>
           <Login />
         </UnIdentified>
+      }
+    />
+    <Route
+      path="/profile"
+      element={
+        <Identified>
+          <Profile />
+        </Identified>
       }
     />
   </>

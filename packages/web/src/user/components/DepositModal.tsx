@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect } from "react";
-import { Button, ButtonGroup, Col, Modal } from "react-bootstrap";
+import { Button, ButtonGroup, Modal } from "react-bootstrap";
 import { useActiveUser } from "../hooks";
 import { User } from "../types";
 import { useApi } from "../../app";
@@ -17,14 +17,16 @@ const DepositModal: FunctionComponent<{
   useEffect(() => {
     if (depositApi.response) {
       setUser({ ...(user as User), deposit: depositApi.response.data });
+      depositApi.reset();
     }
-  }, [depositApi.response]);
+  }, [depositApi, setUser, user]);
 
   useEffect(() => {
     if (resetApi.response) {
       setUser({ ...(user as User), deposit: 0 });
+      resetApi.reset();
     }
-  }, [resetApi.response]);
+  }, [resetApi, setUser, user]);
 
   const loading = resetApi.loading || depositApi.loading;
   return (

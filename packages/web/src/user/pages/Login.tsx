@@ -13,7 +13,7 @@ const LoginSchema = yup.object().shape({
 
 export const Login = () => {
   const { fetch, loading, response, error } = useApi(login);
-  const [, load] = useContext(ActiveUserContext);
+  const [, , load] = useContext(ActiveUserContext);
 
   useEffect(() => {
     if (response) {

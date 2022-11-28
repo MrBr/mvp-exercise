@@ -10,15 +10,20 @@ import { useApi } from "../../app";
 import { getMe } from "../requests";
 import { Spinner } from "react-bootstrap";
 
-type ActiveUserContextType = [User | null, () => Promise<void>];
+type ActiveUserContextType = [
+  User | null,
+  (user: User | null) => void,
+  () => Promise<void>
+];
 export const ActiveUserContext = React.createContext<ActiveUserContextType>([
   null,
+  () => {},
   async () => {},
 ]);
 
 const ActiveUserProvider: ComponentType<PropsWithChildren> = ({ children }) => {
   const { fetch, response } = useApi(getMe);
-  const [user, setState] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   // Check if user is logged in on mount
   useEffect(() => {
@@ -30,13 +35,13 @@ const ActiveUserProvider: ComponentType<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (response) {
-      setState(response.data);
+      setUser(response.data);
     }
   }, [response]);
 
   const activeUserContext = useMemo(
-    () => [user, fetch],
-    [user, fetch]
+    () => [user, setUser, fetch],
+    [user, setUser, fetch]
   ) as ActiveUserContextType;
 
   return (

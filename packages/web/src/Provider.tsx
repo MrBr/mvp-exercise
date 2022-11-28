@@ -1,13 +1,20 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Routes as UserRoutes, Provider as UserProvider } from "./user";
+import { BrowserRouter as Router, Routes } from "react-router-dom";
+import { Provider as UserProvider, renderUserRoutes } from "./user";
+import { Provider as ProductProvider } from "./product";
+import { renderAppRoutes } from "./app";
 
 function Provider() {
   return (
     <UserProvider>
-      <Router>
-        <UserRoutes />
-      </Router>
+      <ProductProvider>
+        <Router>
+          <Routes>
+            {renderUserRoutes()}
+            {renderAppRoutes()}
+          </Routes>
+        </Router>
+      </ProductProvider>
     </UserProvider>
   );
 }

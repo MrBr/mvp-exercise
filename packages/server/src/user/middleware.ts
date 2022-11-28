@@ -17,6 +17,16 @@ export const getUser: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const getMe: RequestHandler = async (req, res, next) => {
+  try {
+    res.locals.data = res.locals.user;
+    next();
+  } catch (e) {
+    next(e);
+    return;
+  }
+};
+
 export const createUser: RequestHandler = async (req, res, next) => {
   const password = await userServices.hashPassword(req.body.password);
 

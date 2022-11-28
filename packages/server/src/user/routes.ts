@@ -6,12 +6,15 @@ import {
   createUser,
   deleteUser,
   deposit,
+  getMe,
   getUser,
   reset,
   updateUser,
 } from "./middleware";
 
 router.get("/user/:id", isIdentified, canEditUser, getUser, sendData);
+
+router.get("/me", isIdentified, getMe, sendData);
 
 router.post("/user", createUser, sendData);
 

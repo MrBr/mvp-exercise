@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../app";
 import { register } from "../requests";
+import { User } from "../types";
 
 const RegisterSchema = yup.object().shape({
   password: yup.string().min(8, "Too Short!").max(24, "Too Long!").required(),
@@ -27,7 +28,7 @@ export const Register = () => {
     initialValues: {
       username: "",
       password: "",
-      role: "buyer",
+      role: "buyer" as User["role"],
     },
     validationSchema: RegisterSchema,
   });

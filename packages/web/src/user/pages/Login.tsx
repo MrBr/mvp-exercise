@@ -1,10 +1,8 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import { Container, Row, Col, FormGroup, Form, Button } from "react-bootstrap";
 import * as yup from "yup";
-import { useApi } from "../../app";
-import { login } from "../requests";
-import { ActiveUserContext } from "../providers/ActiveUser";
+import { useUserAuth } from "../hooks";
 
 const LoginSchema = yup.object().shape({
   password: yup.string().min(8, "Too Short!").max(24, "Too Long!").required(),
@@ -12,18 +10,10 @@ const LoginSchema = yup.object().shape({
 });
 
 export const Login = () => {
-  const { fetch, loading, response, error } = useApi(login);
-  const [, , load] = useContext(ActiveUserContext);
-
-  useEffect(() => {
-    if (response) {
-      sessionStorage.setItem("token", response.data);
-      load();
-    }
-  });
+  const { login, error, loading } = useUserAuth();
 
   const formik = useFormik({
-    onSubmit: (values) => fetch(values),
+    onSubmit: login,
     initialValues: {
       username: "",
       password: "",

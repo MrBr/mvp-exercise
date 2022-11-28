@@ -24,7 +24,7 @@ export const Register = () => {
   });
 
   const formik = useFormik({
-    onSubmit: (values) => fetch(values),
+    onSubmit: fetch,
     initialValues: {
       username: "",
       password: "",

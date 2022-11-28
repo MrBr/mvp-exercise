@@ -27,7 +27,7 @@ export const useProducts = () => {
 
 export const useProduct = (
   productId: number
-): [Product, (product: Product) => void] => {
+): [Product, (product: Product) => void, (product: Product) => void] => {
   const [products, setProducts] = useContext(ProductsContext);
 
   const product = useMemo(
@@ -45,5 +45,15 @@ export const useProduct = (
     [setProducts, products]
   );
 
-  return [product, setProduct];
+  const deleteProduct = useCallback(
+    (updatedProduct: Product) => {
+      const updatedProducts = (products as Product[]).filter(
+        (product) => product.id !== updatedProduct.id
+      );
+      setProducts(updatedProducts);
+    },
+    [setProducts, products]
+  );
+
+  return [product, setProduct, deleteProduct];
 };

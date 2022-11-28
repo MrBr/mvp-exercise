@@ -8,7 +8,6 @@ import React, {
 import { User } from "../types";
 import { useApi } from "../../app";
 import { getMe } from "../requests";
-import { Spinner } from "react-bootstrap";
 
 type ActiveUserContextType = [
   User | null,

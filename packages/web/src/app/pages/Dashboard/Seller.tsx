@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { ProductCard, useProducts } from "../../../product";
-import { useActiveUser, useDepositModal, useUserAuth } from "../../../user";
+import { EditProductModal, ProductCard, useProducts } from "../../../product";
+import { useActiveUser, useUserAuth } from "../../../user";
 import { Link } from "react-router-dom";
-import BuyProductModal from "../../components/BuyProductModal";
 import { User } from "../../../user/types";
 
 const SellerDashboard = () => {
@@ -12,7 +11,6 @@ const SellerDashboard = () => {
   const [selectedProductId, setSelectedProductId] = useState<null | number>(
     null
   );
-  const [depositModal, showDepositModal] = useDepositModal();
   const { logout } = useUserAuth();
 
   useEffect(() => {
@@ -21,17 +19,15 @@ const SellerDashboard = () => {
 
   return (
     <Container>
-      {depositModal}
       {selectedProductId && (
-        <BuyProductModal
+        <EditProductModal
           productId={selectedProductId}
           close={() => setSelectedProductId(null)}
         />
       )}
       <Row>
         <Col>
-          Welcome <Link to="/profile">{user.username}</Link>, you have{" "}
-          <b>{user.deposit}</b> coins
+          Welcome <Link to="/profile">{user.username}</Link>.
         </Col>
         <Col className="col-auto">
           <Button onClick={logout} variant="danger">

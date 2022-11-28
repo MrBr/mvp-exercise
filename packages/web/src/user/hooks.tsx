@@ -3,6 +3,9 @@ import { ActiveUserContext } from "./providers/ActiveUser";
 import DepositModal from "./components/DepositModal";
 import { useApi } from "../app";
 import { login as loginRequest } from "./requests";
+import { FormikProps, useFormik } from "formik";
+import { Product } from "../product/types";
+import * as yup from "yup";
 
 export const useActiveUser = () => {
   return useContext(ActiveUserContext);
@@ -44,4 +47,37 @@ export const useDepositModal = (): [ReactNode, () => void] => {
       setShow(true);
     },
   ];
+};
+
+const ProductSchema = yup.object().shape({
+  productName: yup
+    .string()
+    .min(4, "Too Short!")
+    .max(50, "Too Long!")
+    .required(),
+  cost: yup
+    .number()
+    .test(
+      "cost-value-check",
+      "Value has to be factor of 5.",
+      (value) => !!value && value % 5 === 0
+    )
+    .required(),
+  amountAvailable: yup
+    .number()
+    .min(0, "Can't have negative amount!")
+    .required(),
+});
+export const useProductForm = (
+  product?: Product
+): FormikProps<Pick<Product, "amountAvailable" | "productName" | "cost">> => {
+  return useFormik({
+    onSubmit: () => {},
+    initialValues: {
+      productName: product?.productName || "",
+      amountAvailable: product?.amountAvailable || 0,
+      cost: product?.cost || 5,
+    },
+    validationSchema: ProductSchema,
+  });
 };

@@ -1,2 +1,2 @@
-export { default as Routes } from "./Routes";
+export { default as renderUserRoutes } from "./routes";
 export { default as Provider } from "./providers";

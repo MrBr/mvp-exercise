@@ -8,7 +8,7 @@ export const getAll = createRequest<void, DataResponse<Product[]>>(
 
 export const createProduct = createRequest<
   Pick<Product, "amountAvailable" | "productName" | "cost">,
-  DataResponse<Product[]>
+  DataResponse<Product>
 >(`/product`, "POST");
 
 export const updateProduct = (id: number, update: Partial<Product>) =>

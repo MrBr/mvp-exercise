@@ -48,36 +48,3 @@ export const useDepositModal = (): [ReactNode, () => void] => {
     },
   ];
 };
-
-const ProductSchema = yup.object().shape({
-  productName: yup
-    .string()
-    .min(4, "Too Short!")
-    .max(50, "Too Long!")
-    .required(),
-  cost: yup
-    .number()
-    .test(
-      "cost-value-check",
-      "Value has to be factor of 5.",
-      (value) => !!value && value % 5 === 0
-    )
-    .required(),
-  amountAvailable: yup
-    .number()
-    .min(0, "Can't have negative amount!")
-    .required(),
-});
-export const useProductForm = (
-  product?: Product
-): FormikProps<Pick<Product, "amountAvailable" | "productName" | "cost">> => {
-  return useFormik({
-    onSubmit: () => {},
-    initialValues: {
-      productName: product?.productName || "",
-      amountAvailable: product?.amountAvailable || 0,
-      cost: product?.cost || 5,
-    },
-    validationSchema: ProductSchema,
-  });
-};

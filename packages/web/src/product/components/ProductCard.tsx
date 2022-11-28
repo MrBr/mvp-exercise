@@ -8,7 +8,9 @@ const ProductCard: FunctionComponent<{
 }> = ({ action, product }) => {
   return (
     <Card>
-      <Card.Header>{product.productName}</Card.Header>
+      <Card.Header>
+        {product.productName} by {product.seller.username}
+      </Card.Header>
       <Card.Body>
         <div>Cost: {product.cost}</div>
         <div>Amount available: {product.amountAvailable}</div>

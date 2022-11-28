@@ -1,10 +1,9 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { Button, Col, Modal } from "react-bootstrap";
 import { useApi } from "../../app";
-import { useProduct } from "../hooks";
+import { useProduct, useProductForm } from "../hooks";
 import ProductForm from "./ProductForm";
 import { deleteProduct, updateProduct } from "../requests";
-import { useProductForm } from "../../user";
 
 const BuyProductModal: FunctionComponent<{
   productId: number;

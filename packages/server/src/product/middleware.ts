@@ -16,6 +16,16 @@ export const getProduct: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const findProducts: RequestHandler = async (req, res, next) => {
+  try {
+    res.locals.data = await productServices.findProducts();
+    next();
+  } catch (e) {
+    next(e);
+    return;
+  }
+};
+
 export const createProduct: RequestHandler = async (req, res, next) => {
   try {
     res.locals.data = await productServices.createProduct({

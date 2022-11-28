@@ -3,9 +3,14 @@ import { UPDATEABLE_FIELDS } from "./constants";
 import { Transaction } from "sequelize";
 import db from "../db";
 import { InvalidUnloadAmountError, UnexistingProductError } from "./errors";
+import User from "../user/user.model";
 
 export const getProduct = async (id: number) => {
-  return Product.findOne({ where: { id } });
+  return Product.findOne({ where: { id }, include: [User] });
+};
+
+export const findProducts = async () => {
+  return Product.findAll({ include: [User] });
 };
 
 export const createProduct = async (

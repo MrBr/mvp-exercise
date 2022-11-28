@@ -46,7 +46,7 @@ const ActiveUserProvider: ComponentType<PropsWithChildren> = ({ children }) => {
 
   return (
     <ActiveUserContext.Provider value={activeUserContext}>
-      {!response ? <Spinner animation="border" /> : children}
+      {children}
     </ActiveUserContext.Provider>
   );
 };

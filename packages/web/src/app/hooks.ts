@@ -26,8 +26,8 @@ export const useApi = <T extends Request<any, any>>(request: T) => {
         const response = await request(...args);
         setApiRequestState({
           loading: false,
-          error: null,
-          response: response,
+          error: response.error,
+          response: !response.error && response,
         });
       } catch (e) {
         setApiRequestState({

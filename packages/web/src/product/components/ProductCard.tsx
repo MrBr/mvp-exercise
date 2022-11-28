@@ -4,8 +4,11 @@ import { Product } from "../types";
 
 const ProductCard: FunctionComponent<{
   product: Product;
-  onSelect: () => void;
-}> = ({ product, onSelect }) => {
+  onSelect: (product: Product) => void;
+  onEdit?: (product: Product) => void;
+  editable?: boolean;
+  buyable: boolean;
+}> = ({ product, onSelect, buyable, editable, onEdit }) => {
   return (
     <Card>
       <Card.Header>{product.productName}</Card.Header>
@@ -14,7 +17,12 @@ const ProductCard: FunctionComponent<{
         <div>Amount available: {product.amountAvailable}</div>
       </Card.Body>
       <Card.Footer>
-        <Button onClick={onSelect}>Select</Button>
+        <Button onClick={() => onSelect(product)} disabled={!buyable}>
+          Select
+        </Button>
+        {editable && onEdit && (
+          <Button onClick={() => onEdit(product)}>Edit</Button>
+        )}
       </Card.Footer>
     </Card>
   );

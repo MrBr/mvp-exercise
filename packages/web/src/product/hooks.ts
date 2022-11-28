@@ -1,6 +1,6 @@
 import { useApi } from "../app";
 import { getAll } from "./requests";
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { ProductsContext } from "./providers/Prodcuts";
 
 const useProducts = () => {
@@ -13,12 +13,13 @@ const useProducts = () => {
     }
   }, [response, setProducts]);
 
-  const load = () => {
-    if (products) {
+  const load = useCallback(() => {
+    // Cache products
+    if (products || loading || response) {
       return;
     }
     fetch();
-  };
+  }, [products, loading, fetch, response]);
 
   return { load, products, loading };
 };

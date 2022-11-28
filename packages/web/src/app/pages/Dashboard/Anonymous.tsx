@@ -28,6 +28,7 @@ const AnonymousDashboard = () => {
             <ProductCard product={product} />
           </Col>
         ))}
+        {!products?.length && <p>No products</p>}
       </Row>
     </Container>
   );

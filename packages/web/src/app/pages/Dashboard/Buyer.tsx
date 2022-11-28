@@ -56,6 +56,7 @@ const BuyerDashboard = () => {
             />
           </Col>
         ))}
+        {!products?.length && <p>No products</p>}
       </Row>
     </Container>
   );

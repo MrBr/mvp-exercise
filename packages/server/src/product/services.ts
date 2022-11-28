@@ -14,12 +14,17 @@ export const findProducts = async () => {
 };
 
 export const createProduct = async (
-  product: Pick<
+  productData: Pick<
     Product,
     "productName" | "amountAvailable" | "cost" | "sellerId"
   >
 ) => {
-  return Product.create(product);
+  const product = await Product.create(productData, {
+    include: [User],
+  });
+  // :(
+  // Sequelize can't create with association...
+  return getProduct(product.id);
 };
 
 export const updateProduct = async (

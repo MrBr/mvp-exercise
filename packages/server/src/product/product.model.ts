@@ -26,6 +26,6 @@ export default class Product extends Model {
   @ForeignKey(() => User)
   sellerId: number;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, "sellerId")
   seller: User;
 }

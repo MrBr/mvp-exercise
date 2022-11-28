@@ -17,12 +17,14 @@ export const ActiveUserContext = React.createContext<ActiveUserContextType>([
 ]);
 
 const ActiveUserProvider: ComponentType<PropsWithChildren> = ({ children }) => {
-  const { fetch, response, loading } = useApi(getMe);
+  const { fetch, response } = useApi(getMe);
   const [user, setState] = useState<User | null>(null);
 
   // Check if user is logged in on mount
   useEffect(() => {
-    fetch();
+    if (!user) {
+      fetch();
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -39,7 +41,7 @@ const ActiveUserProvider: ComponentType<PropsWithChildren> = ({ children }) => {
 
   return (
     <ActiveUserContext.Provider value={activeUserContext}>
-      {loading ? <Spinner animation="border" /> : children}
+      {!response ? <Spinner animation="border" /> : children}
     </ActiveUserContext.Provider>
   );
 };

@@ -1,7 +1,14 @@
-import { makeRequest } from "../app";
+import { DataResponse, createRequest } from "../app";
 import { User } from "./types";
 
-export const register = makeRequest<
+export const register = createRequest<
   Pick<User, "username" | "password" | "role">,
-  User
+  DataResponse<User>
 >("/user", "POST");
+
+export const login = createRequest<
+  Pick<User, "username" | "password">,
+  DataResponse<string>
+>("/authorise", "POST");
+
+export const getMe = createRequest<void, DataResponse<User>>("/me", "GET");

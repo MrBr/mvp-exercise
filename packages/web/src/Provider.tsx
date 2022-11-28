@@ -1,12 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Routes as UserRoutes } from "./user";
+import { Routes as UserRoutes, Provider as UserProvider } from "./user";
 
 function Provider() {
   return (
-    <Router>
-      <UserRoutes />
-    </Router>
+    <UserProvider>
+      <Router>
+        <UserRoutes />
+      </Router>
+    </UserProvider>
   );
 }
 

@@ -5,6 +5,7 @@ import { UPDATEABLE_FIELDS } from "./constants";
 import { COINS } from "../app/constants";
 import db from "../db";
 import {
+  InsufficientDeposit,
   InvalidDepositError,
   InvalidDepositor,
   InvalidUpdatePayloadError,
@@ -72,22 +73,26 @@ export const chargeUser = async (
   total: number,
   transaction: Transaction
 ) => {
-  const updates = await User.update(
-    {
-      deposit: db.literal(`deposit - ${db.escape(total)}`),
-    },
-    {
-      where: {
-        id: userId,
+  try {
+    const updates = await User.update(
+      {
+        deposit: db.literal(`deposit - ${db.escape(total)}`),
       },
-      returning: true,
-      transaction,
-    }
-  );
-  const user = updates[1][0];
-  const deposit = user.deposit;
+      {
+        where: {
+          id: userId,
+        },
+        returning: true,
+        transaction,
+      }
+    );
+    const user = updates[1][0];
+    const deposit = user.deposit;
 
-  return { deposit };
+    return { deposit };
+  } catch (e) {
+    throw new InsufficientDeposit();
+  }
 };
 
 export const deleteUser = async (userId: number) => {

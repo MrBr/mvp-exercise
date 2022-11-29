@@ -28,3 +28,10 @@ export class InvalidDepositor extends ApiError {
     super("Only buyers can make deposit.");
   }
 }
+
+export class InsufficientDeposit extends ApiError {
+  status = 400;
+  constructor() {
+    super("Need more funds.");
+  }
+}

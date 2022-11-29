@@ -2,7 +2,11 @@ import Product from "./product.model";
 import { UPDATEABLE_FIELDS } from "./constants";
 import { Transaction } from "sequelize";
 import db from "../db";
-import { InvalidUnloadAmountError, UnexistingProductError } from "./errors";
+import {
+  InsufficientAvailableProductsError,
+  InvalidUnloadAmountError,
+  UnexistingProductError,
+} from "./errors";
 import User from "../user/user.model";
 
 export const getProduct = async (id: number) => {
@@ -47,18 +51,23 @@ export const unloadProducts = async (
     throw new InvalidUnloadAmountError();
   }
 
-  const updates = await Product.update(
-    {
-      amountAvailable: db.literal(`"amountAvailable" - ${db.escape(amount)}`),
-    },
-    {
-      where: {
-        id: productId,
+  let updates;
+  try {
+    updates = await Product.update(
+      {
+        amountAvailable: db.literal(`"amountAvailable" - ${db.escape(amount)}`),
       },
-      returning: true,
-      transaction,
-    }
-  );
+      {
+        where: {
+          id: productId,
+        },
+        returning: true,
+        transaction,
+      }
+    );
+  } catch (e) {
+    throw new InsufficientAvailableProductsError();
+  }
 
   // Not possible to execute query and have zero affected products
   if (updates[0] === 0) {

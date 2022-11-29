@@ -50,7 +50,10 @@ export const deposit = async (userId: number, depositAmount: number) => {
   return updated[1][0];
 };
 
-export const reset = async (userId: number, transaction?: Transaction) => {
+export const resetDeposit = async (
+  userId: number,
+  transaction?: Transaction
+) => {
   return User.update(
     {
       deposit: 0,

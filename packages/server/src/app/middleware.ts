@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { unloadProducts } from "../product/services";
-import { chargeUser, reset } from "../user/services";
+import { chargeUser, resetDeposit } from "../user/services";
 import db from "../db";
 import { InvalidBuyerError } from "./errors";
 import { getChange } from "./services";
@@ -27,7 +27,7 @@ export const buyProduct: RequestHandler = async (req, res, next) => {
       total,
       transaction
     );
-    await reset(res.locals.user.id, transaction);
+    await resetDeposit(res.locals.user.id, transaction);
     await transaction.commit();
 
     const change = getChange(deposit);

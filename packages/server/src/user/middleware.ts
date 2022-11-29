@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import * as userServices from "./services";
 import { generateToken } from "../auth";
-import { assertDepositor, validateUserPassword } from "./services";
+import { validateUserPassword } from "./services";
 import User from "./user.model";
 import { InvalidCredentialsError } from "./errors";
 
@@ -103,10 +103,10 @@ export const deposit: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const reset: RequestHandler = async (req, res, next) => {
+export const resetDeposit: RequestHandler = async (req, res, next) => {
   try {
     userServices.assertDepositor(res.locals.user);
-    await userServices.reset(res.locals.user.id);
+    await userServices.resetDeposit(res.locals.user.id);
     next();
   } catch (e) {
     next(e);

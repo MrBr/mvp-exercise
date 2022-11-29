@@ -8,7 +8,7 @@ import {
   deposit,
   getMe,
   getUser,
-  reset,
+  resetDeposit,
   updateUser,
 } from "./middleware";
 
@@ -26,4 +26,4 @@ router.post("/authorise", authoriseUser, sendData);
 
 router.put("/deposit", isIdentified, deposit, sendData);
 
-router.put("/reset", isIdentified, reset, sendStatusOk);
+router.put("/reset", isIdentified, resetDeposit, sendStatusOk);

@@ -1,8 +1,9 @@
 import { RequestHandler } from "express";
 import { unloadProducts } from "../product/services";
-import { chargeUser } from "../user/services";
+import { chargeUser, reset } from "../user/services";
 import db from "../db";
 import { InvalidBuyerError } from "./errors";
+import { getChange } from "./services";
 
 export const canBuyProduct: RequestHandler = async (req, res, next) => {
   if (res.locals.user?.role === "buyer") {
@@ -16,7 +17,7 @@ export const buyProduct: RequestHandler = async (req, res, next) => {
   const transaction = await db.transaction();
   try {
     const { productId, amount } = req.body;
-    const { total, amountAvailable } = await unloadProducts(
+    const { total, products } = await unloadProducts(
       productId,
       amount,
       transaction
@@ -26,11 +27,14 @@ export const buyProduct: RequestHandler = async (req, res, next) => {
       total,
       transaction
     );
+    await reset(res.locals.user.id, transaction);
     await transaction.commit();
 
+    const change = getChange(deposit);
     res.locals.data = {
-      deposit,
-      amountAvailable,
+      change,
+      total,
+      products,
     };
 
     next();

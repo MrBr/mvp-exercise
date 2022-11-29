@@ -68,10 +68,14 @@ export const unloadProducts = async (
   const newProductState = updates[1][0];
   const total = amount * newProductState.cost;
   const amountAvailable = newProductState.amountAvailable;
+  const products = [...new Array(amount)].map(
+    () => newProductState.productName
+  );
 
   return {
     total,
     amountAvailable,
+    products,
   };
 };
 

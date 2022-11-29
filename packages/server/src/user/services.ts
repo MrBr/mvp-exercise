@@ -1,7 +1,8 @@
 import { compare, hash } from "bcrypt";
 import User from "./user.model";
 import { Transaction } from "sequelize";
-import { ALLOWED_DEPOSITS, UPDATEABLE_FIELDS } from "./constants";
+import { UPDATEABLE_FIELDS } from "./constants";
+import { COINS } from "../app/constants";
 import db from "../db";
 import {
   InvalidDepositError,
@@ -49,7 +50,7 @@ export const deposit = async (userId: number, depositAmount: number) => {
   return updated[1][0];
 };
 
-export const reset = async (userId: number) => {
+export const reset = async (userId: number, transaction?: Transaction) => {
   return User.update(
     {
       deposit: 0,
@@ -58,6 +59,7 @@ export const reset = async (userId: number) => {
       where: {
         id: userId,
       },
+      transaction,
     }
   );
 };
@@ -101,7 +103,7 @@ export const assertUpdates = (update: Partial<User>) => {
 };
 
 export const assertDeposit = (deposit: number) => {
-  if (!ALLOWED_DEPOSITS.includes(deposit)) {
+  if (!COINS.includes(deposit)) {
     throw new InvalidDepositError();
   }
 };

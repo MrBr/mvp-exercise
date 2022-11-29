@@ -1,5 +1,5 @@
 import { ApiError } from "../router";
-import { ALLOWED_DEPOSITS } from "./constants";
+import { COINS } from "../app/constants";
 
 export class InvalidCredentialsError extends ApiError {
   status = 401;
@@ -18,7 +18,7 @@ export class InvalidUpdatePayloadError extends ApiError {
 export class InvalidDepositError extends ApiError {
   status = 400;
   constructor() {
-    super(`Invalid deposit allowed deposits: ${ALLOWED_DEPOSITS.join(",")}`);
+    super(`Invalid deposit allowed deposits: ${COINS.join(",")}`);
   }
 }
 

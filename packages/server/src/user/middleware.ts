@@ -1,9 +1,10 @@
 import { RequestHandler } from "express";
 import * as userServices from "./services";
-import { generateToken } from "../auth";
-import { validateUserPassword } from "./services";
+import { generateToken, verifyToken } from "../auth";
+import { hasValidToken, validateUserPassword } from "./services";
 import User from "./user.model";
 import { InvalidCredentialsError } from "./errors";
+import { USER_TOKEN_DURATION } from "./constants";
 
 export const getUser: RequestHandler = async (req, res, next) => {
   try {
@@ -19,7 +20,7 @@ export const getUser: RequestHandler = async (req, res, next) => {
 
 export const getMe: RequestHandler = async (req, res, next) => {
   try {
-    res.locals.data = res.locals.user;
+    res.locals.data = await userServices.getUser({ id: res.locals.user.id });
     next();
   } catch (e) {
     next(e);
@@ -66,13 +67,23 @@ export const deleteUser: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const logoutAll: RequestHandler = async (req, res, next) => {
+  try {
+    await userServices.logoutUsers(res.locals.user.id);
+    next();
+  } catch (e) {
+    next(e);
+    return;
+  }
+};
+
 export const authoriseUser: RequestHandler = async (req, res, next) => {
-  const user = await userServices.getUser(
+  const user = (await userServices.getUser(
     {
       username: req.body.username,
     },
-    "withPassword"
-  );
+    "withSensitiveData"
+  )) as User;
 
   const validCredentials = user
     ? await validateUserPassword(user, req.body.password)
@@ -83,7 +94,30 @@ export const authoriseUser: RequestHandler = async (req, res, next) => {
     return;
   }
 
-  res.locals.data = generateToken({ userId: (user as User).id });
+  const token = generateToken(
+    {
+      userId: user.id,
+    },
+    { expiresIn: USER_TOKEN_DURATION }
+  );
+  const hasActiveUsers = hasValidToken(user);
+
+  await User.update(
+    {
+      lastTokenExpiry: Date.now() + USER_TOKEN_DURATION * 1000,
+    },
+    {
+      where: {
+        id: user.id,
+      },
+    }
+  );
+
+  res.locals.data = {
+    token,
+    hasActiveUsers,
+  };
+
   next();
 };
 

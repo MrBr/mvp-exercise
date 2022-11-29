@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { verifyToken } from "./services";
+import { isTokenStillValid, verifyToken } from "./services";
 import { UnAuthorizedError } from "./errors";
 import { getUser } from "../user/services";
 
@@ -8,7 +8,11 @@ export const identify: RequestHandler = async (req, res, next) => {
     try {
       const token = req.headers.authorization.split(" ")[1];
       const tokenPayload = verifyToken(token as string);
-      res.locals.user = await getUser({ id: tokenPayload.userId });
+      const user = await getUser({ id: tokenPayload.userId }, "withTokenData");
+      if (user && isTokenStillValid(tokenPayload, user.tokenValidFrom)) {
+        res.locals.user = user;
+        res.locals.token = tokenPayload;
+      }
     } catch (e) {
       next(e);
       return;

@@ -14,8 +14,13 @@ export const updateUser = (id: number, updates: Pick<User, "username">) =>
 
 export const login = createRequest<
   Pick<User, "username" | "password">,
-  DataResponse<string>
+  DataResponse<{ token: string; hasActiveUsers: boolean }>
 >("/authorise", "POST");
+
+export const logoutAll = createRequest<void, StatusResponse>(
+  "/logout/all",
+  "DELETE"
+);
 
 export const deleteUser = (id: number) =>
   createRequest<void, StatusResponse>(`/user/${id}`, "DELETE")();

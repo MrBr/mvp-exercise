@@ -5,7 +5,7 @@ import { InvalidDepositError } from "../errors";
 import { generateToken } from "../../auth";
 import { jsonHeaders, startTestDbContainer } from "../../test";
 
-import { buyer_0, seller } from "../fixtures";
+import { buyer_0, buyer_50, seller } from "../fixtures";
 import { seedUsers } from "../seeders";
 
 describe("PUT /deposit", () => {
@@ -13,7 +13,7 @@ describe("PUT /deposit", () => {
   beforeEach(async () => {
     stopContainer = await startTestDbContainer();
 
-    await seedUsers([buyer_0, seller]);
+    await seedUsers([buyer_0, buyer_50, seller]);
   });
 
   afterEach(async () => {
@@ -45,7 +45,7 @@ describe("PUT /deposit", () => {
     expect(depositResponse.body.error).toEqual(errorMessage);
   });
 
-  it("returns forbidden request when trying to deposit on different account", async () => {
+  it("returns forbidden request when trying to deposit on unexisting account", async () => {
     const token = generateToken({ userId: 100 });
 
     const depositResponse = await request(router)

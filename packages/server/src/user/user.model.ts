@@ -5,11 +5,16 @@ import { Table, Column, Unique, Model, Validate } from "sequelize-typescript";
   timestamps: false,
   defaultScope: {
     attributes: {
-      exclude: ["password"],
+      exclude: ["password", "tokensValidFrom", "lastTokenExpiry"],
     },
   },
   scopes: {
-    withPassword: {},
+    withSensitiveData: {},
+    withTokenData: {
+      attributes: {
+        exclude: ["password"],
+      },
+    },
   },
   hooks: {
     afterCreate: (record) => {
@@ -31,4 +36,10 @@ export default class User extends Model {
   @Validate({ min: 0 })
   @Column
   deposit: number;
+
+  @Column
+  tokenValidFrom: number;
+
+  @Column
+  lastTokenExpiry?: number;
 }

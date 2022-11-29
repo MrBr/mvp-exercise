@@ -1,7 +1,7 @@
 import { compare, hash } from "bcrypt";
 import User from "./user.model";
 import { Transaction } from "sequelize";
-import { UPDATEABLE_FIELDS } from "./constants";
+import { UPDATEABLE_FIELDS, USER_TOKEN_DURATION } from "./constants";
 import { COINS } from "../app/constants";
 import db from "../db";
 import {
@@ -13,7 +13,7 @@ import {
 
 export const getUser = async (
   filters: { id: number } | { username: string },
-  scope: "withPassword" | "defaultScope" = "defaultScope"
+  scope: "withSensitiveData" | "withTokenData" | "defaultScope" = "defaultScope"
 ) => {
   return User.scope(scope).findOne({ where: filters });
 };
@@ -33,6 +33,20 @@ export const updateUser = async (
       id: userId,
     },
   });
+};
+
+export const logoutUsers = async (userId: number) => {
+  return User.update(
+    {
+      tokenValidFrom: Date.now(),
+      lastTokenExpiry: null,
+    },
+    {
+      where: {
+        id: userId,
+      },
+    }
+  );
 };
 
 export const deposit = async (userId: number, depositAmount: number) => {
@@ -129,3 +143,6 @@ export const validateUserPassword = (user: User, password: string) => {
 export const hashPassword = async (password: string) => {
   return hash(password, parseInt(process.env.SALT_ROUNDS as string));
 };
+
+export const hasValidToken = (user: User) =>
+  !!user?.lastTokenExpiry && user?.lastTokenExpiry > Date.now();

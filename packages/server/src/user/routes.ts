@@ -8,6 +8,7 @@ import {
   deposit,
   getMe,
   getUser,
+  logoutAll,
   resetDeposit,
   updateUser,
 } from "./middleware";
@@ -23,6 +24,8 @@ router.put("/user/:id", isIdentified, canEditUser, updateUser, sendStatusOk);
 router.delete("/user/:id", isIdentified, canEditUser, deleteUser, sendStatusOk);
 
 router.post("/authorise", authoriseUser, sendData);
+
+router.delete("/logout/all", isIdentified, logoutAll, sendStatusOk);
 
 router.put("/deposit", isIdentified, deposit, sendData);
 

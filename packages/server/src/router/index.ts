@@ -10,10 +10,11 @@ router.use(cors());
 
 console.log(process.env.APP_DOMAIN);
 
-router.listen(process.env.PORT, () =>
+const server = router.listen(process.env.PORT, () =>
   console.log(`Application started at port: ${process.env.PORT}`)
 );
 
+export { server };
 export * from "./middleware";
 export * from "./errors";
 export default router;

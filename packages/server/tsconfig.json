@@ -15,12 +15,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "ts-node": {
-    "scope": true,
-    "scopeDir": "./src"
-  },
   "include": [
     "./src",
+    "jest.config.ts"
   ],
   "exclude": [
     "node_modules",

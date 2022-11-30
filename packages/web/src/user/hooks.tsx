@@ -26,9 +26,13 @@ export const useUserAuth = () => {
 
   useEffect(() => {
     if (loginApi.response) {
-      sessionStorage.setItem("token", loginApi.response.data.token);
-      // eslint-disable-next-line
-      if (confirm("There are other active user session! Log out all?")) {
+      const { token, hasActiveUsers } = loginApi.response.data;
+      sessionStorage.setItem("token", token);
+      if (
+        hasActiveUsers &&
+        // eslint-disable-next-line
+        confirm("There are other active user session! Log out all?")
+      ) {
         logoutAllApi.fetch();
       } else {
         getMeApi.fetch();

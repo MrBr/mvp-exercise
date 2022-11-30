@@ -14,7 +14,7 @@ export const identify: RequestHandler = async (req, res, next) => {
         res.locals.token = tokenPayload;
       }
     } catch (e) {
-      next(e);
+      next(new UnAuthorizedError());
       return;
     }
   }

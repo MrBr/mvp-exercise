@@ -2,19 +2,27 @@ import { ReactNode, useContext, useEffect, useState, useCallback } from "react";
 import { ActiveUserContext } from "./providers/ActiveUser";
 import DepositModal from "./components/DepositModal";
 import { useApi } from "../app";
-import { login as loginRequest, logoutAll } from "./requests";
+import { getMe, login as loginRequest, logoutAll } from "./requests";
 
 export const useActiveUser = () => {
   return useContext(ActiveUserContext);
 };
 
 export const useUserAuth = () => {
-  const [, setUser, load] = useContext(ActiveUserContext);
+  const [, setUser] = useActiveUser();
   const loginApi = useApi(loginRequest);
   const logoutAllApi = useApi(logoutAll);
+  const getMeApi = useApi(getMe);
 
-  const loading = loginApi.loading || logoutAllApi.loading;
-  const error = loginApi.error || logoutAllApi.error;
+  const loading = loginApi.loading || logoutAllApi.loading || getMeApi.loading;
+  const error = loginApi.error || logoutAllApi.error || getMeApi.error;
+
+  useEffect(() => {
+    if (getMeApi.response) {
+      setUser(getMeApi.response.data);
+      getMeApi.reset();
+    }
+  }, [getMeApi, setUser]);
 
   useEffect(() => {
     if (loginApi.response) {
@@ -23,11 +31,11 @@ export const useUserAuth = () => {
       if (confirm("There are other active user session! Log out all?")) {
         logoutAllApi.fetch();
       } else {
-        load();
+        getMeApi.fetch();
       }
       loginApi.reset();
     }
-  }, [logoutAllApi, loginApi, load]);
+  }, [logoutAllApi, loginApi, getMeApi]);
 
   const loginFetch = loginApi.fetch;
   const login = useCallback(
@@ -36,6 +44,11 @@ export const useUserAuth = () => {
     },
     [loginFetch]
   );
+
+  const getMeFetch = getMeApi.fetch;
+  const fetchMe = useCallback(() => {
+    getMeFetch();
+  }, [getMeFetch]);
 
   const logout = useCallback(() => {
     sessionStorage.clear();
@@ -49,7 +62,7 @@ export const useUserAuth = () => {
     }
   }, [logoutAllApi, logout]);
 
-  return { login, logout, loading, error };
+  return { login, logout, loading, error, fetchMe };
 };
 
 export const useDepositModal = (): [ReactNode, () => void] => {

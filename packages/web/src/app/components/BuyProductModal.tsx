@@ -13,11 +13,7 @@ const BuyProductModal: FunctionComponent<{
   const [amount, setAmount] = useState(0);
   const buyProductApi = useApi(buyProduct);
   const [product, setProduct] = useProduct(productId);
-  const [user, setUser] = useActiveUser() as [
-    User,
-    (user: User) => void,
-    unknown
-  ];
+  const [user, setUser] = useActiveUser() as [User, (user: User) => void];
 
   const userMaxAmount = Math.round(user?.deposit / product.cost) === 0;
   const productMaxStock = amount === product.amountAvailable;

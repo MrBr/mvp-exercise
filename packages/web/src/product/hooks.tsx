@@ -15,7 +15,7 @@ import * as yup from "yup";
 import { FormikProps, useFormik } from "formik";
 
 export const useProducts = () => {
-  const { fetch, response, loading } = useApi(getAll);
+  const { fetch, response, loading, error } = useApi(getAll);
   const [products, setProducts] = useContext(ProductsContext);
 
   useEffect(() => {
@@ -26,11 +26,11 @@ export const useProducts = () => {
 
   const load = useCallback(() => {
     // Cache products
-    if (products || loading || response) {
+    if (products || loading || response || error) {
       return;
     }
     fetch();
-  }, [products, loading, fetch, response]);
+  }, [products, loading, fetch, response, error]);
 
   const addProduct = useCallback(
     (newProduct: Product) => {

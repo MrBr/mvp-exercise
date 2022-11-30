@@ -15,11 +15,7 @@ const UserUpdateSchema = yup.object().shape({
 export const Profile = () => {
   const { fetch, loading, response, error, reset } = useApi(updateUser);
   const deleteUserApi = useApi(deleteUser);
-  const [user, setUser] = useActiveUser() as [
-    User,
-    (user: User) => void,
-    unknown
-  ];
+  const [user, setUser] = useActiveUser() as [User, (user: User) => void];
   const { logout } = useUserAuth();
 
   const formik = useFormik({

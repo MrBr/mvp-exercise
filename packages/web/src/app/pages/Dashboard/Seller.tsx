@@ -12,7 +12,7 @@ import { User } from "../../../user/types";
 
 const SellerDashboard = () => {
   const { load, products } = useProducts();
-  const [user] = useActiveUser() as [User, unknown, unknown];
+  const [user] = useActiveUser() as [User, unknown];
   const [selectedProductId, setSelectedProductId] = useState<null | number>(
     null
   );

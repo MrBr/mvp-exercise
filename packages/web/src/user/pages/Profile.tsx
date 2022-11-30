@@ -7,6 +7,7 @@ import { useApi } from "../../app";
 import { deleteUser, updateUser } from "../requests";
 import { useActiveUser, useUserAuth } from "../hooks";
 import { User } from "../types";
+import { Topbar } from "../../app";
 
 const UserUpdateSchema = yup.object().shape({
   username: yup.string().min(4, "Too Short!").max(16, "Too Long!").required(),
@@ -49,14 +50,14 @@ export const Profile = () => {
 
   return (
     <Container>
-      <Row className="align-items-center">
+      <Topbar>
         <Col>
           <h1>Edit profile</h1>
         </Col>
         <Col className="col-auto">
           <Link to="/">Dashboard</Link>
         </Col>
-      </Row>
+      </Topbar>
       <Form noValidate>
         <Row>
           <Col>

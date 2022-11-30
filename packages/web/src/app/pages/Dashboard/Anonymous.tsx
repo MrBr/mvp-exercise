@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ProductCard, useProducts } from "../../../product";
+import Topbar from "../../components/Topbar";
 
 const AnonymousDashboard = () => {
   const { load, products } = useProducts();
@@ -12,7 +13,7 @@ const AnonymousDashboard = () => {
 
   return (
     <Container>
-      <Row>
+      <Topbar>
         <Col>
           Please{" "}
           <Link to="/login" className="inline">
@@ -20,7 +21,7 @@ const AnonymousDashboard = () => {
           </Link>
           or <Link to="/register">register</Link>.
         </Col>
-      </Row>
+      </Topbar>
       <h1>Products</h1>
       <Row>
         {products?.map((product) => (

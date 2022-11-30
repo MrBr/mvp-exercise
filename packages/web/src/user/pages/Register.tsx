@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { Container, Row, Col, FormGroup, Form, Button } from "react-bootstrap";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-import { useApi } from "../../app";
+import { Topbar, useApi } from "../../app";
 import { register } from "../requests";
 import { User } from "../types";
 
@@ -35,14 +35,14 @@ export const Register = () => {
 
   return (
     <Container>
-      <Row>
+      <Topbar>
         <Col>
           <h1>Register</h1>
         </Col>
         <Col className="col-auto">
           <Link to="/">Dashboard</Link>
         </Col>
-      </Row>
+      </Topbar>
       <Form noValidate>
         <Row>
           <Col>

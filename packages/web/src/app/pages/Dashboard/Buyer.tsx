@@ -5,6 +5,7 @@ import { useActiveUser, useDepositModal, useUserAuth } from "../../../user";
 import { Link } from "react-router-dom";
 import BuyProductModal from "../../components/BuyProductModal";
 import { User } from "../../../user/types";
+import Topbar from "../../components/Topbar";
 
 const BuyerDashboard = () => {
   const { load, products } = useProducts();
@@ -28,7 +29,7 @@ const BuyerDashboard = () => {
           close={() => setSelectedProductId(null)}
         />
       )}
-      <Row>
+      <Topbar>
         <Col>
           Welcome <Link to="/profile">{user.username}</Link>, you have{" "}
           <b>{user.deposit}</b> coins
@@ -41,7 +42,7 @@ const BuyerDashboard = () => {
             Log out
           </Button>
         </Col>
-      </Row>
+      </Topbar>
       <h1>Products</h1>
       <Row>
         {products?.map((product) => (

@@ -4,6 +4,7 @@ import { Container, Row, Col, FormGroup, Form, Button } from "react-bootstrap";
 import * as yup from "yup";
 import { useUserAuth } from "../hooks";
 import { Link } from "react-router-dom";
+import { Topbar } from "../../app";
 
 const LoginSchema = yup.object().shape({
   password: yup.string().min(8, "Too Short!").max(24, "Too Long!").required(),
@@ -24,14 +25,14 @@ export const Login = () => {
 
   return (
     <Container>
-      <Row>
+      <Topbar>
         <Col>
           <h1>Login</h1>
         </Col>
         <Col className="col-auto">
           <Link to="/">Dashboard</Link>
         </Col>
-      </Row>
+      </Topbar>
       <Form noValidate>
         <Row>
           <Col>

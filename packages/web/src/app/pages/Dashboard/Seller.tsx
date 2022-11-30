@@ -9,6 +9,7 @@ import {
 import { useActiveUser, useUserAuth } from "../../../user";
 import { Link } from "react-router-dom";
 import { User } from "../../../user/types";
+import Topbar from "../../components/Topbar";
 
 const SellerDashboard = () => {
   const { load, products } = useProducts();
@@ -32,17 +33,19 @@ const SellerDashboard = () => {
           close={() => setSelectedProductId(null)}
         />
       )}
-      <Row>
+      <Topbar>
         <Col>
           Welcome <Link to="/profile">{user.username}</Link>.
         </Col>
         <Col className="col-auto">
           <Button onClick={showAddProductModal}>Add product</Button>
+        </Col>
+        <Col className="col-auto">
           <Button onClick={logout} variant="danger">
             Log out
           </Button>
         </Col>
-      </Row>
+      </Topbar>
       <h1>Products</h1>
       <Row>
         {products &&

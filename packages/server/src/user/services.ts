@@ -136,8 +136,16 @@ export const assertDepositor = (user: User) => {
   }
 };
 
-export const validateUserPassword = (user: User, password: string) => {
+export const checkUserPassword = (user: User, password: string) => {
   return compare(password, user.password);
+};
+
+export const validatePasswordFormat = (password: string) => {
+  return (
+    password.length >= 8 &&
+    password.length <= 16 &&
+    /^[a-zA-Z0-9_!?&.]*$/.test(password)
+  );
 };
 
 export const hashPassword = async (password: string) => {

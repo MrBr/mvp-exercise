@@ -1,9 +1,13 @@
 import { RequestHandler } from "express";
 import * as userServices from "./services";
-import { generateToken, verifyToken } from "../auth";
-import { hasValidToken, validateUserPassword } from "./services";
+import { generateToken } from "../auth";
+import {
+  hasValidToken,
+  checkUserPassword,
+  validatePasswordFormat,
+} from "./services";
 import User from "./user.model";
-import { InvalidCredentialsError } from "./errors";
+import { InvalidCredentialsError, InvalidPasswordFormatError } from "./errors";
 import { USER_TOKEN_DURATION } from "./constants";
 
 export const getUser: RequestHandler = async (req, res, next) => {
@@ -29,6 +33,11 @@ export const getMe: RequestHandler = async (req, res, next) => {
 };
 
 export const createUser: RequestHandler = async (req, res, next) => {
+  if (!validatePasswordFormat(req.body.password)) {
+    next(new InvalidPasswordFormatError());
+    return;
+  }
+
   const password = await userServices.hashPassword(req.body.password);
 
   try {
@@ -88,7 +97,7 @@ export const authoriseUser: RequestHandler = async (req, res, next) => {
   )) as User;
 
   const validCredentials = user
-    ? await validateUserPassword(user, req.body.password)
+    ? await checkUserPassword(user, req.body.password)
     : false;
 
   if (!validCredentials) {

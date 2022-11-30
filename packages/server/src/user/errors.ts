@@ -8,6 +8,15 @@ export class InvalidCredentialsError extends ApiError {
   }
 }
 
+export class InvalidPasswordFormatError extends ApiError {
+  status = 400;
+  constructor() {
+    super(
+      "Invalid password format. Please use only alphanumeric chars or one of `.?&_!`"
+    );
+  }
+}
+
 export class InvalidUpdatePayloadError extends ApiError {
   status = 400;
   constructor(fields: string[]) {

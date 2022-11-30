@@ -39,7 +39,9 @@ export const createUser: RequestHandler = async (req, res, next) => {
     });
     next();
   } catch (e) {
-    next(e);
+    // Child error is to vague
+    // @ts-ignore
+    next(e?.parent || e);
     return;
   }
 };

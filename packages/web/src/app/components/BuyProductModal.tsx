@@ -78,20 +78,24 @@ const BuyProductModal: FunctionComponent<{
         </Row>
       </Modal.Body>
       <Modal.Footer>
-        <Col className="me-auto">
+        <Col>
           {userMaxAmount && <span>Please deposit more to add product</span>}
           {productMaxStock && <span>No more on stock</span>}
           {buyProductApi.error && <span>{buyProductApi.error}</span>}
         </Col>
-        <Button onClick={close} variant="outline-info">
-          Close
-        </Button>
-        <Button
-          onClick={() => buyProductApi.fetch({ productId, amount })}
-          disabled={disableBuy}
-        >
-          Buy
-        </Button>
+        <Col className="col-auto">
+          <Button onClick={close} variant="outline-info">
+            Close
+          </Button>
+        </Col>
+        <Col className="col-auto">
+          <Button
+            onClick={() => buyProductApi.fetch({ productId, amount })}
+            disabled={disableBuy}
+          >
+            Buy
+          </Button>
+        </Col>
       </Modal.Footer>
     </Modal>
   );

@@ -7,7 +7,7 @@ const ProductCard: FunctionComponent<{
   action?: ReactNode;
 }> = ({ action, product }) => {
   return (
-    <Card>
+    <Card className="mb-4">
       <Card.Header>
         {product.productName} by {product.seller.username}
       </Card.Header>

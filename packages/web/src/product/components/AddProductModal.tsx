@@ -18,8 +18,9 @@ const AddProductModal: FunctionComponent<{
     if (createProductApi.response) {
       addProduct(createProductApi.response.data);
       createProductApi.reset();
+      close();
     }
-  }, [addProduct, createProductApi, productForm]);
+  }, [addProduct, createProductApi, productForm, close]);
 
   const onCreate = async () => {
     await productForm.validateForm();
@@ -37,14 +38,19 @@ const AddProductModal: FunctionComponent<{
         <ProductForm form={productForm} />
       </Modal.Body>
       <Modal.Footer>
-        <Col className="me-auto">
+        <Col>
+          {createProductApi.error && <span>{createProductApi.error}</span>}
+        </Col>
+        <Col className="col-auto">
           <Button onClick={close} variant="outline-info">
             Close
           </Button>
         </Col>
-        <Button onClick={onCreate} disabled={loading || !productForm.isValid}>
-          Create
-        </Button>
+        <Col className="col-auto">
+          <Button onClick={onCreate} disabled={loading || !productForm.isValid}>
+            Create
+          </Button>
+        </Col>
       </Modal.Footer>
     </Modal>
   );

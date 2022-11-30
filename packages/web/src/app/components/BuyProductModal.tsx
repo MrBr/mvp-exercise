@@ -3,14 +3,16 @@ import { Button, Col, Modal, Row } from "react-bootstrap";
 import { useActiveUser } from "../../user";
 import { User } from "../../user/types";
 import { useApi } from "../hooks";
-import { buyProduct } from "../requests";
+import { buyProduct, BuyProductResponseData } from "../requests";
 import { useProduct } from "../../product";
+import PurchaseFeedback from "./PurchaseFeedback";
 
 const BuyProductModal: FunctionComponent<{
   productId: number;
   close: () => void;
 }> = ({ close, productId }) => {
   const [amount, setAmount] = useState(0);
+  const [purchase, setPurchase] = useState<BuyProductResponseData | null>(null);
   const buyProductApi = useApi(buyProduct);
   const [product, setProduct] = useProduct(productId);
   const [user, setUser] = useActiveUser() as [User, (user: User) => void];
@@ -20,6 +22,7 @@ const BuyProductModal: FunctionComponent<{
 
   const disableAdd = productMaxStock || userMaxAmount || buyProductApi.loading;
   const disableRemove = amount === 0 || buyProductApi.loading;
+  const disableBuy = amount === 0 || buyProductApi.loading;
 
   useEffect(() => {
     if (buyProductApi.response) {
@@ -27,11 +30,26 @@ const BuyProductModal: FunctionComponent<{
       setProduct({
         ...product,
         amountAvailable:
-          product.amountAvailable - buyProductApi.response.products.length,
+          product.amountAvailable - buyProductApi.response.data.products.length,
       });
+      setPurchase(buyProductApi.response.data);
       buyProductApi.reset();
     }
-  }, [product, setProduct, setUser, user, buyProductApi]);
+  }, [product, setProduct, setUser, user, buyProductApi, setPurchase]);
+
+  if (purchase) {
+    return (
+      <Modal show>
+        <Modal.Header>Purchase completed</Modal.Header>
+        <Modal.Body>
+          <PurchaseFeedback purchase={purchase} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={close}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
 
   return (
     <Modal show>
@@ -63,11 +81,15 @@ const BuyProductModal: FunctionComponent<{
         <Col className="me-auto">
           {userMaxAmount && <span>Please deposit more to add product</span>}
           {productMaxStock && <span>No more on stock</span>}
+          {buyProductApi.error && <span>{buyProductApi.error}</span>}
         </Col>
         <Button onClick={close} variant="outline-info">
           Close
         </Button>
-        <Button onClick={() => {}} disabled={amount === 0}>
+        <Button
+          onClick={() => buyProductApi.fetch({ productId, amount })}
+          disabled={disableBuy}
+        >
           Buy
         </Button>
       </Modal.Footer>

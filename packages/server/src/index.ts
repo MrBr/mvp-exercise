@@ -1,5 +1,9 @@
 const path = require("path");
-require("dotenv").config({ path: path.join(__dirname, "../.env") });
+
+const envFilename = process.env.NODE_ENV
+  ? `.env.${process.env.NODE_ENV}`
+  : ".env";
+require("dotenv").config({ path: path.join(__dirname, `../${envFilename}`) });
 
 import "./db";
 import "./router";

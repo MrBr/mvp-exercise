@@ -54,9 +54,11 @@ const SellerDashboard = () => {
               <ProductCard
                 product={product}
                 action={
-                  <Button onClick={() => setSelectedProductId(product.id)}>
-                    Edit
-                  </Button>
+                  product.seller.id === user.id && (
+                    <Button onClick={() => setSelectedProductId(product.id)}>
+                      Edit
+                    </Button>
+                  )
                 }
               />
             </Col>
